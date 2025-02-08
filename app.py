@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 from functools import wraps
 import io
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Add a secret key for sessions
@@ -335,4 +336,5 @@ def chat():
     })
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Default to 5000 if PORT is not set
+    app.run(host="0.0.0.0", port=port, debug=True)
