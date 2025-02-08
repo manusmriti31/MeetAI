@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks{% endblock %}
+{% block description %}Manage your tasks effectively.{% endblock %}
+
+{% block content %}
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <h1 class="text-2xl font-bold text-neutral-800">Task Management</h1>
+    <div class="flex flex-col sm:flex-row gap-4">
+        <div class="relative">
+            <input
+                type="text"
+                placeholder="Search tasks..."
+                class="pl-10 pr-4 py-2 rounded-lg border border-neutral-200/20 bg-white focus:outline-none focus:border-neutral-300"
+            />
+            <svg
+                class="absolute left-3 top-2.5 h-5 w-5 text-neutral-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+            </svg>
+        </div>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            New Task
+        </button>
+    </div>
+</div>
+<!-- Kanban Board -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- To Do Column -->
+    <div class="bg-white rounded-lg border border-neutral-200/20 p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="font-semibold text-neutral-800">To Do</h2>
+            <span class="px-3 py-1 text-sm bg-neutral-100 text-neutral-600 rounded-full task-count">{{ todo_tasks|length }}</span>
+        </div>
+        <div class="space-y-4 min-h-[200px] task-column" 
+             id="todo-column"
+             ondrop="drop(event, 'todo')"
+             ondragover="allowDrop(event)">
+            {% for task in todo_tasks %}
+                {% include 'task_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- In Progress Column -->
+    <div class="bg-white rounded-lg border border-neutral-200/20 p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="font-semibold text-neutral-800">In Progress</h2>
+            <span class="px-3 py-1 text-sm bg-neutral-100 text-neutral-600 rounded-full task-count">{{ in_progress_tasks|length }}</span>
+        </div>
+        <div class="space-y-4 min-h-[200px] task-column" 
+             id="in-progress-column"
+             ondrop="drop(event, 'in_progress')"
+             ondragover="allowDrop(event)">
+            {% for task in in_progress_tasks %}
+                {% include 'task_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Completed Column -->
+    <div class="bg-white rounded-lg border border-neutral-200/20 p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="font-semibold text-neutral-800">Completed</h2>
+            <span class="px-3 py-1 text-sm bg-neutral-100 text-neutral-600 rounded-full task-count">{{ completed_tasks|length }}</span>
+        </div>
+        <div class="space-y-4 min-h-[200px] task-column" 
+             id="completed-column"
+             ondrop="drop(event, 'completed')"
+             ondragover="allowDrop(event)">
+            {% for task in completed_tasks %}
+                {% include 'task_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .task-column {
+        min-height: 200px;
+        padding: 1rem;
+        transition: background-color 0.2s;
+    }
+    .task-column.drag-over {
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+</style>
+{% endblock %}

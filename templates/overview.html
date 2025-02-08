@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Overview{% endblock %}
+{% block description %}Overview of your meetings and activities.{% endblock %}
+
+{% block content %}
+<!-- Overview Content -->
+<header class="flex justify-between items-center mb-8">
+    <h1 class="text-2xl font-bold text-neutral-800">Overview</h1>
+    <div class="flex items-center space-x-4">
+        <div class="relative">
+            <input
+                type="text"
+                placeholder="Search..."
+                class="pl-10 pr-4 py-2 rounded-lg border border-neutral-200/20 bg-white focus:outline-none focus:border-neutral-300"
+            />
+            <svg
+                class="absolute left-3 top-2.5 h-5 w-5 text-neutral-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+            </svg>
+        </div>
+    </div>
+</header>
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-lg border border-neutral-200/20">
+        <div class="flex items-center justify-between">
+            <h3 class="text-neutral-500">Total Meetings</h3>
+            <svg
+                class="w-6 h-6 text-blue-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                ></path>
+            </svg>
+        </div>
+        <p class="text-3xl font-bold text-neutral-800 mt-2">124</p>
+        <p class="text-sm text-green-500 mt-2">↑ 12% from last month</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg border border-neutral-200/20">
+        <div class="flex items-center justify-between">
+            <h3 class="text-neutral-500">Tasks Completed</h3>
+            <svg
+                class="w-6 h-6 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                ></path>
+            </svg>
+        </div>
+        <p class="text-3xl font-bold text-neutral-800 mt-2">85</p>
+        <p class="text-sm text-green-500 mt-2">↑ 8% from last month</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg border border-neutral-200/20">
+        <div class="flex items-center justify-between">
+            <h3 class="text-neutral-500">Pending Decisions</h3>
+            <svg
+                class="w-6 h-6 text-yellow-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+            </svg>
+        </div>
+        <p class="text-3xl font-bold text-neutral-800 mt-2">12</p>
+        <p class="text-sm text-red-500 mt-2">↑ 3 new today</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg border border-neutral-200/20">
+        <div class="flex items-center justify-between">
+            <h3 class="text-neutral-500">Time Saved</h3>
+            <svg
+                class="w-6 h-6 text-purple-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+            </svg>
+        </div>
+        <p class="text-3xl font-bold text-neutral-800 mt-2">48h</p>
+        <p class="text-sm text-green-500 mt-2">↑ 15% efficiency gain</p>
+    </div>
+</div>
+<!-- Today's Schedule -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Today's Schedule Section -->
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg border border-neutral-200/20 p-6">
+            <h2 class="text-lg font-semibold text-neutral-800 mb-4">Today's Schedule</h2>
+            <div class="space-y-4">
+                {% if meetings %}
+                    {% for meeting in meetings %}
+                        <div class="flex items-center p-4 bg-{{ meeting.color }}-50 rounded-lg border border-{{ meeting.color }}-100">
+                            <div class="flex-shrink-0 w-2 h-2 bg-{{ meeting.color }}-500 rounded-full"></div>
+                            <div class="ml-4">
+                                <p class="font-medium text-neutral-800">{{ meeting.meeting_name }}</p>
+                                <p class="text-sm text-neutral-500">
+                                    {{ meeting.meeting_time.strftime('%I:%M %p') }}
+                                </p>
+                            </div>
+                            {% if meeting.meeting_url %}
+                                <a href="{{ meeting.meeting_url }}" target="_blank" 
+                                   class="ml-auto px-4 py-2 text-sm text-{{ meeting.color }}-600 hover:bg-{{ meeting.color }}-100 rounded-lg transition-colors">
+                                    Join
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-neutral-500 text-center py-4">No meetings scheduled for today</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Recent Activity Section -->
+    <div class="bg-white rounded-lg border border-neutral-200/20 p-6">
+        <h2 class="text-lg font-semibold text-neutral-800 mb-4">Recent Tasks</h2>
+        <div class="space-y-4">
+            {% if activities %}
+                {% for activity in activities %}
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-neutral-800">{{ activity.description }}</p>
+                            <p class="text-xs text-neutral-500">
+                                From: {{ activity.meeting_name }} • {{ activity.timestamp.strftime('%B %d, %Y') }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-neutral-500 text-center py-4">No recent tasks</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
